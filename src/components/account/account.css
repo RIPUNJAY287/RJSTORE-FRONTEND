@@ -1,0 +1,14 @@
+.profiledetail {
+  padding: 20px 10px 10px 10px;
+  color: white;
+}
+.profile {
+  background-image: linear-gradient(
+    94.3deg,
+    rgba(26, 33, 64, 1) 10.9%,
+    rgba(81, 84, 115, 1) 87.1%
+  );
+}
+.active {
+  background-color: rgba(26, 33, 64, 1);
+}

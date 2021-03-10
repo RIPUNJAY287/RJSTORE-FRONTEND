@@ -1,0 +1,9 @@
+.addressCard {
+  background-color: rgba(26, 33, 64, 1);
+  width: 40%;
+}
+@media (max-width: 992px) {
+  .addressCard {
+    width: 80%;
+  }
+}

@@ -1,0 +1,39 @@
+.cartpic {
+  object-fit: cover;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.cartRow {
+  width: 40%;
+  min-height: 100px;
+  background-image: linear-gradient(
+    to left,
+    rgba(26, 33, 64, 1) 10.9%,
+    rgba(81, 84, 115, 1) 87.1%
+  );
+  color: white;
+}
+.cartt {
+  background-image: url("/src/clothes-background.jpg");
+  min-height: 700px;
+  object-fit: cover;
+  text-align: center;
+}
+
+.addminus {
+  width: 20px;
+  height: 20px;
+  margin: 0px 0px 1px 0px;
+}
+@media (max-width: 768px) {
+  .cartRow {
+    width: 75%;
+  }
+}
+
+@media (max-width: 1000px) {
+  .cartRow {
+    width: 60%;
+  }
+}

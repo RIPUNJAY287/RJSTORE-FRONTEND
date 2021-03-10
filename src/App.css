@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+.clothes-background {
+  background-image: url("clothes-background.jpg");
+}
+* {
+  margin: 0px;
+  padding: 0px;
+}

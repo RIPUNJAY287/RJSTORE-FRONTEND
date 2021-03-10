@@ -1,0 +1,21 @@
+.signupDiv {
+  background-image: url("/src/clothes-background.jpg");
+  height: 700px;
+  object-fit: cover;
+}
+@media (min-width: 768px) {
+  .signupPanel {
+    width: 40%;
+  }
+  .signupDiv {
+    padding-top: 10px;
+  }
+}
+@media (min-width: 1200px) {
+  .signupPanel {
+    width: 28%;
+  }
+  .signupDiv {
+    padding-top: 25px;
+  }
+}

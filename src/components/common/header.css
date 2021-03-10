@@ -1,0 +1,21 @@
+.nav-item {
+  margin-right: 20px;
+  font-size: 18px;
+  padding: 2px;
+}
+.Nav {
+  margin-right: 50px;
+}
+.navLink,
+.navLink:hover {
+  color: white;
+  text-decoration: none;
+  padding: 2px;
+}
+.NavBar {
+  background-image: linear-gradient(
+    94.3deg,
+    rgba(26, 33, 64, 1) 10.9%,
+    rgba(81, 84, 115, 1) 87.1%
+  );
+}

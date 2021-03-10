@@ -1,0 +1,30 @@
+.loginDiv {
+  background-image: url("/src/clothes-background.jpg");
+  height: 700px;
+  object-fit: cover;
+}
+.lLink {
+  text-decoration: none;
+  color: white;
+  float: right;
+  padding: 5px;
+}
+.lLink:hover {
+  color: white;
+}
+@media (min-width: 768px) {
+  .loginPanel {
+    width: 30%;
+  }
+  .loginDiv {
+    padding-top: 100px;
+  }
+}
+@media (min-width: 1200px) {
+  .loginPanel {
+    width: 22%;
+  }
+  .loginDiv {
+    padding-top: 150px;
+  }
+}
