@@ -30,14 +30,36 @@ function Login() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    var passlen = passwordRef.current.value;
+
+    if (passlen.length < 8) {
+      alert("password length should be equal or greater than 8");
+      return;
+    }
     try {
       setError("");
       setLoading(true);
+
       const result = await login(
         emailRef.current.value,
         passwordRef.current.value
       );
+
       const token = await result.user.getIdToken();
+      const tokenresult = await result.user.getIdTokenResult();
+
+      // auth
+      // .revokeRefreshTokens(uid)
+      // .then(() => {
+      // return auth.getUser(uid);
+      // })
+      // .then((userRecord) => {
+      // return new Date(userRecord.tokensValidAfterTime).getTime() / 1000;
+      // })
+      // .then((timestamp) => {
+      // console.log(`Tokens revoked at: ${timestamp}`);
+      // });
+
       const res = await axios.post(
         `http://localhost:4000/api/user/getDetails`,
         {
@@ -56,10 +78,7 @@ function Login() {
         user: result.user,
       };
       await asyncLocalStorage.setItem("userData", JSON.stringify(userData));
-      console.log(result.user);
       setCurrentUser(result.user);
-      console.log("after Login");
-      console.log(userData);
       history.push("/");
     } catch {
       console.log("failed to log in");
@@ -99,7 +118,7 @@ function Login() {
 
   return (
     <>
-      <div className="loginDiv">
+      <div className="loginDiv clothes-background">
         <div className="loginPanel mx-auto p-5 bg-dark text-white rounded">
           <Form>
             <Form.Group controlId="formBasicEmail">
@@ -108,6 +127,7 @@ function Login() {
                 type="email"
                 placeholder="Enter email"
                 ref={emailRef}
+                required
               />
               <Form.Text className="text-muted">
                 We'll never share your email with anyone else.
@@ -120,6 +140,7 @@ function Login() {
                 type="password"
                 placeholder="Password"
                 ref={passwordRef}
+                required
               />
             </Form.Group>
             <Button

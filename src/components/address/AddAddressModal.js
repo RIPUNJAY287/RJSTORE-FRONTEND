@@ -33,7 +33,7 @@ export default function AddAddressModal(props) {
         }),
       });
       if (res) {
-        props.isupdated(Math.random());
+        props.fetchdata();
         props.onHide();
       }
     } catch (err) {
@@ -53,7 +53,7 @@ export default function AddAddressModal(props) {
         <Form onSubmit={handleSubmit}>
           <div className="form-row">
             <Form.Group className="col-md-12">
-              <Form.Label>House No.</Form.Label>
+              <Form.Label>Title</Form.Label>
               <InputGroup>
                 <Form.Control
                   size="sm"

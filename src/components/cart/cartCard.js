@@ -46,9 +46,11 @@ function CartCard(props) {
         .then((res) => {
           console.log("cart updated");
           setloading(false);
-          props.isupdated(Math.random());
+          props.fetchcart();
         })
-        .catch((err) => {});
+        .catch((err) => {
+          console.log(err);
+        });
     })();
   }, [qty]);
 
@@ -72,7 +74,7 @@ function CartCard(props) {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER,
         });
-        props.isupdated(Math.random());
+        props.fetchcart();
       })
       .catch((err) => {
         console.log(err);
@@ -102,7 +104,8 @@ function CartCard(props) {
           <div className=" col-md-9">
             <h6 className="text-center pt-1 ">{props.product.title}</h6>
 
-            <p className="">{description}</p>
+            <p>{description}</p>
+            <p>Rs {props.product.price}</p>
           </div>
           <Button
             variant="light"
@@ -127,7 +130,6 @@ function CartCard(props) {
             variant="light"
             className="text-dark w-100 p-1 rounded-0 "
             style={{ borderStyle: "none" }}
-            onClick={removeItem}
           >
             <span className="text-danger  font-weight-bold "> X</span> Remove
             From Cart

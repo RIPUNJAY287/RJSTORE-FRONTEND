@@ -21,7 +21,8 @@ const Profile = lazy(() => import("./components/account/profile"));
 const Order = lazy(() => import("./components/order/order"));
 const Cart = lazy(() => import("./components/cart/cart"));
 const Checkout = lazy(() => import("./components/checkout/checkout"));
-
+const Thanks = lazy(() => import("./components/Thanks"));
+const Fail = lazy(() => import("./components/Fail"));
 function App(props) {
   return (
     <>
@@ -39,7 +40,8 @@ function App(props) {
               <Route path="/order" exact component={Order} />
               <Route path="/cart" exact component={Cart} />
               <Route path="/checkout" exact component={Checkout} />
-
+              <Route path="/thanks" exact component={Thanks} />
+              <Route path="/failed" exact component={Fail} />
               <Route
                 path="/tshirtmerchandise"
                 exact

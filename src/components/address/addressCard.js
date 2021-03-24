@@ -34,7 +34,7 @@ function AddressCard(props) {
         }
       )
       .then((res) => {
-        props.isupdated(Math.random());
+        props.fetchdata();
         console.log("address removed");
       })
       .catch((err) => {
@@ -46,7 +46,7 @@ function AddressCard(props) {
     <>
       <EditAddressModal
         show={editModal}
-        isupdated={props.isupdated}
+        fetchdata={props.fetchdata}
         addressId={props.address.id}
         onHide={hideEditModal}
       />

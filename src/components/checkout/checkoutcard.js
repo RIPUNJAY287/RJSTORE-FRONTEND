@@ -4,7 +4,7 @@ import { Card } from "react-bootstrap";
 function CheckoutCard(props) {
   return (
     <>
-      <div className="row">
+      <div className="row text-left">
         <div className="col-lg-3 col-md-5 col-sm-6 mx-auto my-4">
           <Card>
             <Card.Header>PRICE DETAILS</Card.Header>

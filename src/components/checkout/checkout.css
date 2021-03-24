@@ -1,0 +1,21 @@
+.paymentcheck {
+  width: 50%;
+  margin: 10px auto 0px auto;
+  padding-bottom: 20px;
+  background-image: linear-gradient(
+    150deg,
+    black 10.9%,
+    rgba(81, 84, 115, 1) 87.9%
+  );
+}
+
+@media (min-width: 1200px) {
+  .containAddress {
+    margin-left: 20%;
+  }
+}
+@media (max-width: 578px) {
+  .paymentcheck {
+    width: 75%;
+  }
+}

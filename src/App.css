@@ -38,7 +38,7 @@
 }
 
 .clothes-background {
-  background-image: url("clothes-background.jpg");
+  background-image: url("./clothes-background.jpg");
 }
 * {
   margin: 0px;

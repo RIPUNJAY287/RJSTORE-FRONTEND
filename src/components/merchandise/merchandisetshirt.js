@@ -21,10 +21,10 @@ function MerchandiseTshirt() {
     fetchdata();
     console.log("fetched");
   }, []);
-  if (tshirt !== null || tshirt !== undefined || loading === false) {
+  if (loading === false) {
     return (
       <>
-        <div class="container-fluid food-background">
+        <div class="container-fluid clothes-background">
           <div class="row">
             {tshirt.map((item) => {
               console.log(item);

@@ -1,20 +1,25 @@
-.orderDetails {
-  font-size: 15px;
+.cartpic {
+  object-fit: cover;
+  max-height: 100%;
+  max-width: 100%;
 }
-.orderCard {
-  background-color: red;
-  width: 50%;
-  margin: 2px auto 2px auto;
+
+.orderRow {
+  width: 90%;
+  background-image: linear-gradient(
+    150deg,
+    rgba(26, 33, 64, 1) 10.9%,
+    rgba(81, 84, 115, 1) 87.9%
+  );
+  color: white;
 }
-.orderpiccard {
-  width: 30%;
-  height: 10%;
+
+.orders {
+  padding: 0px 10px 0px 10px;
 }
-.orderpic {
-  float: left;
-}
-@media (max-width: 1100px) {
-  .orderCard {
-    width: 75%;
+
+@media (max-width: 768px) {
+  .orderRow {
+    width: 60%;
   }
 }

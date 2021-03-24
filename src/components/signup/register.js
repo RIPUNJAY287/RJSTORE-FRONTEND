@@ -31,9 +31,12 @@ function Register() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(emailRef.current.value);
-    console.log(passwordRef.current.value);
-
+    var passlen = passwordRef.current.value;
+    console.log(passlen.length);
+    if (passlen.length < 8) {
+      alert("password length should be equal or greater than 8");
+      return;
+    }
     try {
       setError("");
       setLoading(true);
@@ -63,7 +66,6 @@ function Register() {
         };
         await asyncLocalStorage.setItem("userData", JSON.stringify(userData));
         setUserData(userData);
-        console.log(userData);
         setCurrentUser(result.user);
         history.push("/login");
         alert("You are registered, Login now");
@@ -117,12 +119,17 @@ function Register() {
   };
 
   return (
-    <div className="signupDiv">
+    <div className="signupDiv clothes-background">
       <div className="signupPanel mx-auto p-5 bg-dark text-white rounded">
         <Form>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Display Name</Form.Label>
-            <Form.Control type="text" placeholder="Enter Name" ref={nameRef} />
+            <Form.Control
+              type="text"
+              placeholder="Enter Name"
+              ref={nameRef}
+              required
+            />
           </Form.Group>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
@@ -130,6 +137,7 @@ function Register() {
               type="email"
               placeholder="Enter email"
               ref={emailRef}
+              required
             />
             <Form.Text className="text-muted">
               We'll never share your email with anyone else.
@@ -141,6 +149,8 @@ function Register() {
               type="password"
               placeholder="Password"
               ref={passwordRef}
+              placeholder="atleast length of 8"
+              required
             />
           </Form.Group>
           <Form.Group controlId="formBasicPassword">
@@ -149,6 +159,7 @@ function Register() {
               type="text"
               placeholder="Enter Phone Number"
               ref={phoneRef}
+              required
             />
           </Form.Group>
 

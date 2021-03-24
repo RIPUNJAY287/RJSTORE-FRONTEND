@@ -8,14 +8,14 @@
   width: 40%;
   min-height: 100px;
   background-image: linear-gradient(
-    to left,
+    150deg,
     rgba(26, 33, 64, 1) 10.9%,
-    rgba(81, 84, 115, 1) 87.1%
+    rgba(81, 84, 115, 1) 87.9%
   );
   color: white;
 }
 .cartt {
-  background-image: url("/src/clothes-background.jpg");
+  background-image: url("/src/backgroundClothes.png");
   min-height: 700px;
   object-fit: cover;
   text-align: center;
@@ -28,12 +28,12 @@
 }
 @media (max-width: 768px) {
   .cartRow {
-    width: 75%;
+    width: 30%;
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
   .cartRow {
-    width: 60%;
+    width: 50%;
   }
 }

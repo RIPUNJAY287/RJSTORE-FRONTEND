@@ -1,6 +1,18 @@
 .addressCard {
-  background-color: rgba(26, 33, 64, 1);
+  background-image: linear-gradient(
+    150deg,
+    rgba(26, 33, 64, 1) 10.9%,
+    rgba(81, 84, 115, 1) 87.9%
+  );
   width: 40%;
+}
+.chooseaddressCard {
+  background-image: linear-gradient(
+    150deg,
+    rgba(26, 33, 64, 1) 10.9%,
+    rgba(81, 84, 115, 1) 87.9%
+  );
+  max-width: 300px;
 }
 @media (max-width: 992px) {
   .addressCard {

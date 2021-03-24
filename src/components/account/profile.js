@@ -7,10 +7,11 @@ import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import "./account.css";
 import Address from "../address/address";
 import Offer from "../offer/offer";
+import Order from "../order/order";
 function Profile() {
   return (
     <>
-      <section className="section pt-4 pb-4">
+      <section className="section pt-4 pb-4 clothes-background">
         <Container>
           <Row>
             <Col md={3}>
@@ -81,7 +82,7 @@ function Profile() {
             </Col>
             <Col md={9}>
               <Switch>
-                <Route path="/profile/orders" exact component={Address} />
+                <Route path="/profile/orders" exact component={Order} />
                 <Route path="/profile/offer" exact component={Offer} />
                 <Route path="/profile/address" exact component={Address} />
               </Switch>

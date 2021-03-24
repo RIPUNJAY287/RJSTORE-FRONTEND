@@ -5,7 +5,7 @@ import "./merchandise.css";
 function MerchandiseHead() {
   return (
     <>
-      <div class="container-fluid food-background">
+      <div class="container-fluid clothes-background">
         <div class="row">
           <div class="col-md-4">
             <div

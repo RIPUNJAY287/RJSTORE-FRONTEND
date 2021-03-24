@@ -11,6 +11,7 @@ function WishlistCard(props) {
   const history = useHistory();
   const { uid, token } = JSON.parse(localStorage.getItem("userData"));
   const product = { quantity: 1, ...props.product };
+
   const addCartItem = async () => {
     if (currentUser) {
       await axios
@@ -59,7 +60,7 @@ function WishlistCard(props) {
           autoClose: 2000,
           position: toast.POSITION.TOP_CENTER,
         });
-        props.isupdated(Math.random());
+        props.fetchlist();
       }
     } catch (err) {
       console.log(err);

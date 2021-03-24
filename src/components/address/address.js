@@ -11,45 +11,45 @@ function Address() {
   const [address, setaddress] = useState([]);
   const hideAddressModal = () => showAddressModal(false);
   const [updated, isupdated] = useState();
-  useEffect(() => {
-    const fetchdata = async () => {
-      await axios
-        .post(
-          "http://localhost:4000/api/user/address/get",
-          {
-            uid: uid,
+  const [loading, setloading] = useState(false);
+  const fetchdata = async () => {
+    setloading(true);
+    await axios
+      .post(
+        "http://localhost:4000/api/user/address/get",
+        {
+          uid: uid,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
           },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: token,
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res.data);
-          setaddress(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
+        }
+      )
+      .then((res) => {
+        setaddress(res.data);
+        setloading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
     fetchdata();
   }, [updated]);
 
   {
-    if (address != undefined) {
+    if (loading === false) {
       return (
         <>
           <div className="text-center">
             {address
               ? address.map((item) => {
-                  console.log("item is here");
-                  console.log(item);
-
                   return (
                     <div>
-                      <AddressCard address={item} isupdated={isupdated} />
+                      <AddressCard address={item} fetchdata={fetchdata} />
                     </div>
                   );
                 })
@@ -57,7 +57,7 @@ function Address() {
 
             <AddAddressModal
               show={addressModal}
-              isupdated={isupdated}
+              fetchdata={fetchdata}
               onHide={hideAddressModal}
             />
 

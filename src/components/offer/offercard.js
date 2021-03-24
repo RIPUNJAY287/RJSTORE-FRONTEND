@@ -1,21 +1,43 @@
-import React from "react";
-import { Card, Media, Button } from "react-bootstrap";
-
+import React, { useState } from "react";
+import { Card, Button } from "react-bootstrap";
+import "./offer.css";
 function OfferCard(props) {
   const { token, uid } = JSON.parse(localStorage.getItem("userData"));
-
+  const [copySuccess, setCopySuccess] = useState("");
+  const copyToClipboard = async (copy) => {
+    try {
+      await navigator.clipboard.writeText(copy);
+      setCopySuccess("Copied!");
+    } catch (err) {
+      setCopySuccess("Failed to copy!");
+    }
+  };
   return (
     <>
-      <Card className="shadow-sm mb-4">
-        <Card.Body>
-          <Card.Title className="card-title">Promo title</Card.Title>
-          <Card.Subtitle className="mb-2 text-block">50 % off</Card.Subtitle>
-          <Card.Text>this offer is valid till 29th april</Card.Text>
-          <Button variant="link" className="card-btn mr-3 p-0">
-            COPY CODE
-          </Button>
-        </Card.Body>
-      </Card>
+      <div className=" float-left offerCard">
+        <Card className="Offercard text-white">
+          <Card.Body>
+            <Card.Title className="card-title">
+              {props.promo.Description}
+            </Card.Title>
+            <Card.Subtitle className="mb-2 text-block">
+              {props.promo.Percentage} % off
+            </Card.Subtitle>
+            <Card.Text>
+              this offer is valid till {props.promo.Expiry.day}/
+              {props.promo.Expiry.month}/{props.promo.Expiry.year}
+            </Card.Text>
+            <Button
+              variant="outline-light"
+              size="sm"
+              onClick={copyToClipboard(props.promo.code)}
+            >
+              {" "}
+              {props.promo.code}
+            </Button>
+          </Card.Body>
+        </Card>
+      </div>
     </>
   );
 }
