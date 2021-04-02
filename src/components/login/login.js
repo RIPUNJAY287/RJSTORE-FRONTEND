@@ -1,12 +1,12 @@
 import React, { useRef, useState } from "react";
-import { Link, useHistory, Redirect } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import "./login.css";
 import { useAuth } from "../../context/AuthContext";
 import { auth, googleProvider } from "../../firebase";
 import { FcGoogle } from "react-icons/fc";
-import Spin from "../spinner/spinner";
+
 const asyncLocalStorage = {
   setItem: async function (key, value) {
     return Promise.resolve().then(function () {
@@ -24,7 +24,7 @@ function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const history = useHistory();
-  const { login, currentUser, setCurrentUser } = useAuth();
+  const { login, setCurrentUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 

@@ -10,10 +10,10 @@ function Address() {
   const [addressModal, showAddressModal] = React.useState(false);
   const [address, setaddress] = useState([]);
   const hideAddressModal = () => showAddressModal(false);
-  const [updated, isupdated] = useState();
   const [loading, setloading] = useState(false);
   const fetchdata = async () => {
     setloading(true);
+    //fetching all the address
     await axios
       .post(
         "http://localhost:4000/api/user/address/get",
@@ -38,7 +38,7 @@ function Address() {
 
   useEffect(() => {
     fetchdata();
-  }, [updated]);
+  }, []);
 
   {
     if (loading === false) {

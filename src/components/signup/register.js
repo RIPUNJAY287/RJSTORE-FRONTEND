@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Link, useHistory, Redirect } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 import "./register.css";
 import { FcGoogle } from "react-icons/fc";

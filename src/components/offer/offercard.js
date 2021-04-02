@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Card, Button } from "react-bootstrap";
 import "./offer.css";
 function OfferCard(props) {
-  const { token, uid } = JSON.parse(localStorage.getItem("userData"));
   const [copySuccess, setCopySuccess] = useState("");
+  // to copy the code to clipboard
   const copyToClipboard = async (copy) => {
     try {
       await navigator.clipboard.writeText(copy);

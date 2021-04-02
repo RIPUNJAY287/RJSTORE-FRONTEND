@@ -1,7 +1,6 @@
 import React from "react";
-import axios from "axios";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { useHistory, NavLink, Switch, Route } from "react-router-dom";
+import { Container, Row, Col } from "react-bootstrap";
+import { NavLink, Switch, Route } from "react-router-dom";
 import { MdLocationOn, MdLocalOffer } from "react-icons/md";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import "./account.css";

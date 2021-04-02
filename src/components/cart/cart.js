@@ -8,12 +8,12 @@ import CheckoutCard from "../checkout/checkoutcard";
 
 function Cart() {
   const [cart, setcart] = useState();
-  const [updated, isupdated] = useState();
   const [totalPrice, setTotalPrice] = useState(0);
   const [itemQty, setitemQty] = useState(0);
 
   const fetchcart = async () => {
     const { uid, token } = JSON.parse(localStorage.getItem("userData"));
+    //fetching all item from cart
     await axios
       .post(
         "http://localhost:4000/api/merchandise/cart/all",
@@ -37,8 +37,8 @@ function Cart() {
   };
   useEffect(() => {
     fetchcart();
-  }, [updated]);
-  if (cart != undefined) {
+  }, []);
+  if (cart !== undefined) {
     return (
       <>
         <div className=" cartt py-3  ">

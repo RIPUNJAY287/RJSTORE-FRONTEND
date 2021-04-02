@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 import { MdExitToApp, MdArrowForward } from "react-icons/md";
 import { useAuth } from "../../context/AuthContext";
-import Spin from "../spinner/spinner";
+
 import NavbarToggle from "react-bootstrap/esm/NavbarToggle";
 import NavbarCollapse from "react-bootstrap/esm/NavbarCollapse";
 const asyncLocalStorage = {

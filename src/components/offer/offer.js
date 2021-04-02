@@ -9,6 +9,7 @@ function Offer(props) {
   useEffect(() => {
     (async () => {
       setloading(true);
+      // fetching all the promocodes
       await axios
         .post(
           "http://localhost:4000/api/promocode/getAll",

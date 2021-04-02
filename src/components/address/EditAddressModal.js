@@ -22,7 +22,7 @@ export default function EditAddressModal(props) {
       state: stateRef.current.value,
       pincode: pincodeRef.current.value,
     };
-
+    // to edit your address
     try {
       const res = await axios.post(
         `http://localhost:4000/api/user/address/edit`,

@@ -13,6 +13,7 @@ function WishList() {
   const fetchlist = async () => {
     const wishitem = [];
     if (currentUser) {
+      // fetching the list of wishlist item
       await axios
         .post(
           "http://localhost:4000/api/merchandise/getwishlist",
@@ -25,6 +26,7 @@ function WishList() {
           }
         )
         .then((res) => {
+          // fetching the wishlist item
           const allItems = res.data.map((it) => {
             return axios
               .post(
@@ -59,8 +61,8 @@ function WishList() {
   useEffect(() => {
     fetchlist();
   }, []);
-  if (wishList != undefined && wishList != null) {
-    if (wishList.length == 0) {
+  if (wishList !== undefined && wishList !== null) {
+    if (wishList.length === 0) {
       return (
         <div
           class="container-fluid clothes-background text-center"

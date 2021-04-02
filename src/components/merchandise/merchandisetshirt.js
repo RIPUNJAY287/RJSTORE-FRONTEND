@@ -9,6 +9,7 @@ function MerchandiseTshirt() {
   const [loading, setloading] = useState(false);
   useEffect(() => {
     setloading(true);
+    //fetching all the t-shirts
     const fetchdata = async () => {
       const result = await axios.get(
         "http://localhost:4000/api/merchandise/getAlltshirt"

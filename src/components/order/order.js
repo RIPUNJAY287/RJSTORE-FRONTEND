@@ -13,6 +13,7 @@ function Order() {
     const orderitem = [];
     if (currentUser) {
       setloading(true);
+      //fetching the list of order by the user
       await axios
         .post(
           "http://localhost:4000/api/order/orderlist",
@@ -25,6 +26,7 @@ function Order() {
           }
         )
         .then((res) => {
+          // fetching the orders from the list
           const allItems = res.data.map((it) => {
             return axios
               .post(
@@ -49,7 +51,7 @@ function Order() {
           });
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.message);
         });
     } else {
       console.log("login first");

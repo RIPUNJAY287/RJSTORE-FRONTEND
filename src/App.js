@@ -23,6 +23,18 @@ const Cart = lazy(() => import("./components/cart/cart"));
 const Checkout = lazy(() => import("./components/checkout/checkout"));
 const Thanks = lazy(() => import("./components/Thanks"));
 const Fail = lazy(() => import("./components/Fail"));
+const NotFound = lazy(() => import("./components/NotFound"));
+const AboutUs = lazy(() => import("./components/staticPages/AboutUs"));
+const RefundPolicy = lazy(() =>
+  import("./components/staticPages/RefundPolicy.js")
+);
+const Terms = lazy(() => import("./components/staticPages/TermsOfServices.js"));
+const PrivacyPolicy = lazy(() =>
+  import("./components/staticPages/PrivacyPolicy.js")
+);
+const ContactUs = lazy(() =>
+  import("./components/staticPages/ContactUS/Index.js")
+);
 function App(props) {
   return (
     <>
@@ -42,6 +54,12 @@ function App(props) {
               <Route path="/checkout" exact component={Checkout} />
               <Route path="/thanks" exact component={Thanks} />
               <Route path="/failed" exact component={Fail} />
+              <Route path="/404" exact component={NotFound} />
+              <Route path="/refund" exact component={RefundPolicy} />
+              <Route path="/about" exact component={AboutUs} />
+              <Route path="/privacy" exact component={PrivacyPolicy} />
+              <Route path="/terms" exact component={Terms} />
+              <Route path="/contact" exact component={ContactUs}></Route>
               <Route
                 path="/tshirtmerchandise"
                 exact

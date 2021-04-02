@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { FaCartPlus, FaHeartBroken } from "react-icons/fa";
@@ -10,10 +10,29 @@ function WishlistCard(props) {
   const { currentUser } = useAuth();
   const history = useHistory();
   const { uid, token } = JSON.parse(localStorage.getItem("userData"));
-  const product = { quantity: 1, ...props.product };
 
-  const addCartItem = async () => {
+  const [size, setsize] = useState([]);
+  const [sizeModal, setsizeModal] = useState();
+
+  const selectSize = async () => {
+    const availSize = props.product.details.size;
+    setsize(availSize);
+    setsizeModal(true);
+  };
+
+  const cancelSize = () => {
+    setsizeModal(false);
+  };
+
+  const addCartItem = async (sz) => {
     if (currentUser) {
+      const product = {
+        quantity: 1,
+        ...props.product,
+      };
+      product.details.size = sz;
+
+      console.log(product);
       await axios
         .post(
           "http://localhost:4000/api/merchandise/cart/add",
@@ -89,12 +108,38 @@ function WishlistCard(props) {
           </button>
           <button
             class="btn btn-success rounded float-right"
-            onClick={addCartItem}
+            onClick={selectSize}
           >
             <FaCartPlus />
           </button>
         </div>
       </div>
+      <Modal
+        id="sizeModal"
+        show={sizeModal}
+        onHide={cancelSize}
+        style={{ margin: "220px auto 0px auto", borderRadius: "30px" }}
+      >
+        {/* <Modal.Header className="py-1" closeButton> */}
+        {/* <h4 style={{ marginLeft: "35%" }}> Select the size </h4> */}
+        {/* </Modal.Header> */}
+        <Modal.Body class="my-1 text-center">
+          <h5 className="mt-1"> Select the size </h5>
+          {size
+            ? size.map((item) => {
+                return (
+                  <button
+                    class="btn btn-outline-warning  py-2 px-3 m-4 rounded"
+                    onClick={() => addCartItem(item)}
+                  >
+                    {item}
+                  </button>
+                );
+              })
+            : null}
+        </Modal.Body>
+      </Modal>
+
       <ToastContainer />
     </>
   );

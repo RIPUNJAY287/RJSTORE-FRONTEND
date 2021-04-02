@@ -21,7 +21,6 @@ function loadrazorpay(src) {
 }
 
 function Checkout(props) {
-  const { location } = props;
   const history = useHistory();
   const { uid, token, name, phone, email } = JSON.parse(
     localStorage.getItem("userData")
@@ -355,7 +354,7 @@ function Checkout(props) {
           }
         )
         .then((res) => {
-          if (res.data.error == false) {
+          if (res.data.error === false) {
             const percent = res.data.promocode.Percentage;
             setpromoMessage(`${res.data.message} & will apply`);
             setpromoPercentage(percent);

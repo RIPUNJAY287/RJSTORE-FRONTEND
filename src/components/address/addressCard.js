@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Card, Media, Button } from "react-bootstrap";
+import { Card, Media } from "react-bootstrap";
 import EditAddressModal from "./EditAddressModal";
 import axios from "axios";
 function AddressCard(props) {
@@ -17,7 +17,9 @@ function AddressCard(props) {
     " " +
     props.address.state;
 
+  // to hide the modal
   const hideEditModal = () => showEditModal(false);
+  //to delete the address
   const onDeleteClick = async () => {
     await axios
       .post(

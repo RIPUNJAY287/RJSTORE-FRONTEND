@@ -10,12 +10,15 @@ function CartCard(props) {
   const [qty, setqty] = useState(props.product.quantity);
   const [loading, setloading] = useState(false);
   const description =
+    "Color : " +
     props.product.details.color +
-    " " +
+    " | " +
+    "Size : " +
     props.product.details.size +
-    " " +
+    " | " +
+    " Brand : " +
     props.product.details.brand;
-
+  //change the quantity of item and changing the variable named qty
   const itemIncrement = async () => {
     setqty(qty + 1);
   };
@@ -54,6 +57,7 @@ function CartCard(props) {
     })();
   }, [qty]);
 
+  // to remove the item from the cart
   const removeItem = async () => {
     await axios
       .post(
@@ -67,6 +71,7 @@ function CartCard(props) {
         }
       )
       .then((res) => {
+        //this is toast
         toast.error("Removed from Wishlist", {
           draggable: false,
           hideProgressBar: true,

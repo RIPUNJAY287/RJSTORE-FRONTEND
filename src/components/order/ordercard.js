@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import "./order.css";
 function OrderCard(props) {
