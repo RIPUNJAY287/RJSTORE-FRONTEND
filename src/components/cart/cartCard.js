@@ -5,10 +5,14 @@ import { Button } from "react-bootstrap";
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
 import Spin from "../spinner/spinner";
+import { useHistory } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 function CartCard(props) {
   const { uid, token } = JSON.parse(localStorage.getItem("userData"));
   const [qty, setqty] = useState(props.product.quantity);
   const [loading, setloading] = useState(false);
+  const history = useHistory();
+  const { logout } = useAuth();
   const description =
     "Color : " +
     props.product.details.color +
@@ -51,8 +55,13 @@ function CartCard(props) {
           setloading(false);
           props.fetchcart();
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(async (err) => {
+          if (err.response.data.error === "Unauthenticated");
+          {
+            await logout();
+            console.log("UnAuthenticated");
+            history.push("/login");
+          }
         });
     })();
   }, [qty]);
@@ -81,19 +90,21 @@ function CartCard(props) {
         });
         props.fetchcart();
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(async (err) => {
+        if (err.response.data.error === "Unauthenticated");
+        {
+          await logout();
+          console.log("UnAuthenticated");
+          history.push("/login");
+        }
       });
   };
   if (loading === false) {
     return (
       <>
-        <div className="row text-center mx-auto my-2 cartRow ">
+        <div className="row text-center mx-auto my-2 cartRow rounded ">
           <div className="col-md-3 p-0 m-0 text-center">
-            <img
-              className="cartpic p-1"
-              src={process.env.PUBLIC_URL + "/img/merchandise/merchandise1.jpg"}
-            />
+            <img className="cartpic p-1" src={props.product.ImgLink} />
             <p className="p-0 m-0 ">
               <AiOutlineMinusCircle
                 className="addminus"
@@ -114,8 +125,8 @@ function CartCard(props) {
           </div>
           <Button
             variant="light"
-            className="text-dark w-100 p-1 rounded-0 "
-            style={{ borderStyle: "none" }}
+            className="text-dark w-100 p-1 rounded-0  border"
+            style={{ borderStyle: "none", fontSize: "15px" }}
             onClick={removeItem}
           >
             <span className="text-danger  font-weight-bold "> X</span> Remove

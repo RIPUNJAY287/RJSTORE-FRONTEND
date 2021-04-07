@@ -12,7 +12,7 @@ code {
     monospace;
 }
 .clothes-background {
-  background-image: url("./backgroundClothes.png");
+  background-color: #e6f7ff;
 }
 * {
   margin: 0px;

@@ -4,8 +4,10 @@ import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import WishlistCard from "./wishlistCard";
 import Spin from "../spinner/spinner";
+import { useHistory } from "react-router-dom";
 function WishList() {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
+  const history = useHistory();
 
   const { uid, token } = JSON.parse(localStorage.getItem("userData"));
   const [wishList, setwishList] = useState();
@@ -40,8 +42,13 @@ function WishList() {
                 const result = { id: it, ...resp.data };
                 wishitem.push(result);
               })
-              .catch((err) => {
-                console.log(err);
+              .catch(async (err) => {
+                if (err.response.data.error === "Unauthenticated");
+                {
+                  await logout();
+                  console.log("UnAuthenticated");
+                  history.push("/login");
+                }
               });
           });
           Promise.all(allItems).then(() => {
@@ -50,8 +57,13 @@ function WishList() {
             console.log("wishlist after");
           });
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(async (err) => {
+          if (err.response.data.error === "Unauthenticated");
+          {
+            await logout();
+            console.log("UnAuthenticated");
+            history.push("/login");
+          }
         });
     } else {
       console.log("login first");

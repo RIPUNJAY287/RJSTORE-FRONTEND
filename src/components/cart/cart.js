@@ -5,12 +5,16 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import Spin from "../spinner/spinner";
 import CheckoutCard from "../checkout/checkoutcard";
+import { useHistory } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 function Cart() {
   const [cart, setcart] = useState();
   const [totalPrice, setTotalPrice] = useState(0);
   const [itemQty, setitemQty] = useState(0);
 
+  const history = useHistory();
+  const { logout } = useAuth();
   const fetchcart = async () => {
     const { uid, token } = JSON.parse(localStorage.getItem("userData"));
     //fetching all item from cart
@@ -33,6 +37,14 @@ function Cart() {
         }
         setTotalPrice(tprice);
         setitemQty(res.data.length);
+      })
+      .catch(async (err) => {
+        if (err.response.data.error === "Unauthenticated");
+        {
+          await logout();
+          console.log("UnAuthenticated");
+          history.push("/login");
+        }
       });
   };
   useEffect(() => {
@@ -41,7 +53,7 @@ function Cart() {
   if (cart !== undefined) {
     return (
       <>
-        <div className=" cartt py-3  ">
+        <div className=" cartt clothes-background py-3  ">
           {cart
             ? cart.map((item) => {
                 return (

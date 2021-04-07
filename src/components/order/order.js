@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import OrderCard from "./ordercard";
 import { useAuth } from "../../context/AuthContext";
+import { useHistory } from "react-router-dom";
 import Spin from "../spinner/spinner";
 function Order() {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
+
+  const history = useHistory();
   const { uid, token } = JSON.parse(localStorage.getItem("userData"));
   const [orderList, setorderList] = useState([]);
   const [loading, setloading] = useState(false);
@@ -40,8 +43,13 @@ function Order() {
                 const result = { id: it, ...resp.data };
                 orderitem.push(result);
               })
-              .catch((err) => {
-                console.log(err);
+              .catch(async (err) => {
+                if (err.response.data.error === "Unauthenticated");
+                {
+                  await logout();
+                  console.log("UnAuthenticated");
+                  history.push("/login");
+                }
               });
           });
           Promise.all(allItems).then(() => {
@@ -50,8 +58,13 @@ function Order() {
             setloading(false);
           });
         })
-        .catch((err) => {
-          console.log(err.message);
+        .catch(async (err) => {
+          if (err.response.data.error === "Unauthenticated");
+          {
+            await logout();
+            console.log("UnAuthenticated");
+            history.push("/login");
+          }
         });
     } else {
       console.log("login first");

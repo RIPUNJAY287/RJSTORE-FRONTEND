@@ -8,12 +8,12 @@ import { ToastContainer, toast } from "react-toastify";
 import refreshToken from "../refreshToken";
 import "react-toastify/dist/ReactToastify.css";
 function MerchandiseCard(props) {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
   const history = useHistory();
   const [size, setsize] = useState([]);
 
   const [sizeModal, setsizeModal] = useState();
-
+  console.log(props.product.ImgLink);
   //selecting the size of t-shirt
   const selectSize = async () => {
     const availSize = props.product.details.size;
@@ -56,11 +56,12 @@ function MerchandiseCard(props) {
           });
           console.log("added to cart");
         })
-        .catch((err) => {
-          console.log(err.response.data.error);
+        .catch(async (err) => {
           if (err.response.data.error === "Unauthenticated");
           {
+            await logout();
             console.log("UnAuthenticated");
+            history.push("/login");
           }
         });
     } else {
@@ -94,6 +95,14 @@ function MerchandiseCard(props) {
             position: toast.POSITION.TOP_CENTER,
           });
           console.log("added to wishlist");
+        })
+        .catch(async (err) => {
+          if (err.response.data.error === "Unauthenticated");
+          {
+            await logout();
+            console.log("UnAuthenticated");
+            history.push("/login");
+          }
         });
     } else {
       history.push("./login");
@@ -110,7 +119,7 @@ function MerchandiseCard(props) {
         <img
           class="card-img-top"
           height="350px"
-          src={process.env.PUBLIC_URL + "/img/merchandise/merchandise3.jpg"}
+          src={props.product.ImgLink}
           alt="T-Shirt"
         />
         <h5 className="m-auto">{props.product.title}</h5>

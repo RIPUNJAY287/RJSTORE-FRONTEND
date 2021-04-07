@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Card, Media } from "react-bootstrap";
 import EditAddressModal from "./EditAddressModal";
+import { useHistory } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 function AddressCard(props) {
   const [editModal, showEditModal] = useState(false);
+  const history = useHistory();
+  const { logout } = useAuth();
   const { token, uid } = JSON.parse(localStorage.getItem("userData"));
   const Address =
     props.address.houseNumber +
@@ -39,8 +43,13 @@ function AddressCard(props) {
         props.fetchdata();
         console.log("address removed");
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(async (err) => {
+        if (err.response.data.error === "Unauthenticated");
+        {
+          await logout();
+          console.log("UnAuthenticated");
+          history.push("/login");
+        }
       });
   };
 

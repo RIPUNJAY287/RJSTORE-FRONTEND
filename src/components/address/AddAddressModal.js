@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, InputGroup, Modal, Button } from "react-bootstrap";
-
+import axios from "axios";
 export default function AddAddressModal(props) {
   const housenoRef = React.useRef();
   const line1Ref = React.useRef();
@@ -23,21 +23,39 @@ export default function AddAddressModal(props) {
       pincode: pincodeRef.current.value,
     };
     try {
-      console.log(address);
-      const res = await fetch("http://localhost:4000/api/user/address/add", {
-        method: "post",
-        headers: { "Content-Type": "application/json", Authorization: token },
-        body: JSON.stringify({
-          address: address,
-          uid: uid,
-        }),
-      });
-      if (res) {
-        props.fetchdata();
-        props.onHide();
-      }
-    } catch (err) {
-      console.log(err);
+      await axios
+        .post("http://localhost:4000/api/pincode/check", {
+          pincode: pincodeRef.current.value,
+        })
+        .then(async (resp) => {
+          if (resp.data.success === true) {
+            const res = await fetch(
+              "http://localhost:4000/api/user/address/add",
+              {
+                method: "post",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: token,
+                },
+                body: JSON.stringify({
+                  address: address,
+                  uid: uid,
+                }),
+              }
+            );
+            if (res) {
+              props.fetchdata();
+              props.onHide();
+            }
+          } else {
+            alert("Pincode is not available for Delivery, Change your Address");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (Err) {
+      console.log(Err);
     }
   };
 

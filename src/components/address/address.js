@@ -3,10 +3,15 @@ import axios from "axios";
 import { Button } from "react-bootstrap";
 import "./address.css";
 import AddressCard from "./addressCard";
+import { useHistory } from "react-router-dom";
 import AddAddressModal from "./AddAddressModal";
+import { useAuth } from "../../context/AuthContext";
+
 import Spin from "../spinner/spinner";
 function Address() {
   const { uid, token } = JSON.parse(localStorage.getItem("userData"));
+  const { logout } = useAuth();
+  const history = useHistory();
   const [addressModal, showAddressModal] = React.useState(false);
   const [address, setaddress] = useState([]);
   const hideAddressModal = () => showAddressModal(false);
@@ -31,8 +36,13 @@ function Address() {
         setaddress(res.data);
         setloading(false);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(async (err) => {
+        if (err.response.data.error === "Unauthenticated");
+        {
+          await logout();
+          console.log("UnAuthenticated");
+          history.push("/login");
+        }
       });
   };
 

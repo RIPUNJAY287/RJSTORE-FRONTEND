@@ -1,6 +1,8 @@
 import React from "react";
 import { Form, InputGroup, Modal, Button } from "react-bootstrap";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 export default function EditAddressModal(props) {
   const housenoRef = React.useRef();
   const line1Ref = React.useRef();
@@ -9,6 +11,9 @@ export default function EditAddressModal(props) {
   const stateRef = React.useRef();
   const pincodeRef = React.useRef();
   const titleRef = React.useRef();
+
+  const history = useHistory();
+  const { logout } = useAuth();
 
   const { token, uid } = JSON.parse(localStorage.getItem("userData"));
   const handleSubmit = async (e) => {
@@ -24,21 +29,46 @@ export default function EditAddressModal(props) {
     };
     // to edit your address
     try {
-      const res = await axios.post(
-        `http://localhost:4000/api/user/address/edit`,
-        {
-          address: address,
-          uid: uid,
-          addressId: props.addressId,
-        },
-        {
-          headers: { "Content-Type": "application/json", Authorization: token },
-        }
-      );
-      if (res) {
-        props.fetchdata();
-        props.onHide();
-      }
+      await axios
+        .post("http://localhost:4000/api/pincode/check", {
+          pincode: pincodeRef.current.value,
+        })
+        .then(async (resp) => {
+          if (resp.data.success === true) {
+            await axios
+              .post(
+                `http://localhost:4000/api/user/address/edit`,
+                {
+                  address: address,
+                  uid: uid,
+                  addressId: props.addressId,
+                },
+                {
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: token,
+                  },
+                }
+              )
+              .then((res) => {
+                props.fetchdata();
+                props.onHide();
+              })
+              .catch(async (err) => {
+                if (err.response.data.error === "Unauthenticated");
+                {
+                  await logout();
+                  console.log("UnAuthenticated");
+                  history.push("/login");
+                }
+              });
+          } else {
+            alert("Pincode is not available for Delivery, Change your Address");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (err) {
       console.log(err);
     }

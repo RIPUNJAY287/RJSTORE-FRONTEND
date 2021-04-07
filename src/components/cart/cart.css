@@ -15,7 +15,6 @@
   color: white;
 }
 .cartt {
-  background-image: url("/src/backgroundClothes.png");
   min-height: 700px;
   object-fit: cover;
   text-align: center;

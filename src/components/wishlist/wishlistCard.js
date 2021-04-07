@@ -7,7 +7,7 @@ import { FaCartPlus, FaHeartBroken } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 
 function WishlistCard(props) {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
   const history = useHistory();
   const { uid, token } = JSON.parse(localStorage.getItem("userData"));
 
@@ -53,6 +53,14 @@ function WishlistCard(props) {
             position: toast.POSITION.TOP_CENTER,
           });
           console.log("added to cart");
+        })
+        .catch(async (err) => {
+          if (err.response.data.error === "Unauthenticated");
+          {
+            await logout();
+            console.log("UnAuthenticated");
+            history.push("/login");
+          }
         });
     } else {
       history.push("./login");
@@ -61,26 +69,38 @@ function WishlistCard(props) {
   };
   const WishlistRemove = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:4000/api/merchandise/wishlist/remove",
-        {
-          uid: uid,
-          productId: props.product.id,
-        },
-        {
-          headers: { "Content-Type": "application/json", Authorization: token },
-        }
-      );
-      if (res) {
-        toast.error("Removed from Wishlist", {
-          draggable: false,
-          hideProgressBar: true,
-          closeOnClick: true,
-          autoClose: 2000,
-          position: toast.POSITION.TOP_CENTER,
+      const res = await axios
+        .post(
+          "http://localhost:4000/api/merchandise/wishlist/remove",
+          {
+            uid: uid,
+            productId: props.product.id,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+          }
+        )
+        .then((res) => {
+          toast.error("Removed from Wishlist", {
+            draggable: false,
+            hideProgressBar: true,
+            closeOnClick: true,
+            autoClose: 2000,
+            position: toast.POSITION.TOP_CENTER,
+          });
+          props.fetchlist();
+        })
+        .catch(async (err) => {
+          if (err.response.data.error === "Unauthenticated");
+          {
+            await logout();
+            console.log("UnAuthenticated");
+            history.push("/login");
+          }
         });
-        props.fetchlist();
-      }
     } catch (err) {
       console.log(err);
     }
@@ -94,7 +114,7 @@ function WishlistCard(props) {
         <img
           class="card-img-top"
           height="350px"
-          src={process.env.PUBLIC_URL + "/img/merchandise/merchandise3.jpg"}
+          src={props.product.ImgLink}
           alt="T-Shirt"
         />
         <h5 className="m-auto">{props.product.title}</h5>
