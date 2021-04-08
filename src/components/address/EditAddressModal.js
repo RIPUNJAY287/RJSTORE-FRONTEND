@@ -3,6 +3,7 @@ import { Form, InputGroup, Modal, Button } from "react-bootstrap";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import baseUrl from "../baseUrl";
 export default function EditAddressModal(props) {
   const housenoRef = React.useRef();
   const line1Ref = React.useRef();
@@ -15,7 +16,6 @@ export default function EditAddressModal(props) {
   const history = useHistory();
   const { logout } = useAuth();
 
-  const { token, uid } = JSON.parse(localStorage.getItem("userData"));
   const handleSubmit = async (e) => {
     e.preventDefault();
     const address = {
@@ -29,15 +29,18 @@ export default function EditAddressModal(props) {
     };
     // to edit your address
     try {
+      // checking if pincode is available for delivery
+      const { token, uid } = JSON.parse(localStorage.getItem("userData"));
       await axios
-        .post("http://localhost:4000/api/pincode/check", {
+        .post(`${baseUrl}/api/pincode/check`, {
           pincode: pincodeRef.current.value,
         })
         .then(async (resp) => {
+          // if availbale then edit the address
           if (resp.data.success === true) {
             await axios
               .post(
-                `http://localhost:4000/api/user/address/edit`,
+                `${baseUrl}/api/user/address/edit`,
                 {
                   address: address,
                   uid: uid,
@@ -55,14 +58,17 @@ export default function EditAddressModal(props) {
                 props.onHide();
               })
               .catch(async (err) => {
+                // if the user is authenticated then logging out the user
                 if (err.response.data.error === "Unauthenticated");
                 {
                   await logout();
                   console.log("UnAuthenticated");
                   history.push("/login");
+                  alert("Your session is expired");
                 }
               });
           } else {
+            // if pincode is not available then alert the user for this
             alert("Pincode is not available for Delivery, Change your Address");
           }
         })

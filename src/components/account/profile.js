@@ -1,13 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { NavLink, Switch, Route } from "react-router-dom";
+import { NavLink, Switch, Route, useHistory } from "react-router-dom";
 import { MdLocationOn, MdLocalOffer } from "react-icons/md";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import "./account.css";
 import Address from "../address/address";
 import Offer from "../offer/offer";
 import Order from "../order/order";
+import baseUrl from "../baseUrl";
+import { useAuth } from "../../context/AuthContext";
+import axios from "axios";
 function Profile() {
+  const [name, setName] = useState("-");
+  const [email, setEmail] = useState("-");
+  const [phone, setPhone] = useState("-");
+  const { currentUser, logout } = useAuth();
+  const history = useHistory();
+  useEffect(() => {
+    if (currentUser !== null) {
+      const { uid, token } = JSON.parse(localStorage.getItem("userData"));
+      (async () => {
+        await axios
+          .post(
+            `${baseUrl}/api/user/getDetails`,
+            {
+              uid: uid,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: token,
+              },
+            }
+          )
+          .then((res) => {
+            setName(res.data.name);
+            setEmail(res.data.email);
+            setPhone(res.data.phone);
+          });
+      })();
+    } else {
+      (async () => {
+        await logout();
+        console.log("UnAuthenticated");
+        history.push("/login");
+        alert("your session is expired");
+      })();
+    }
+  }, []);
+
   return (
     <>
       <section className="section pt-4 pb-4 clothes-background">
@@ -28,9 +69,9 @@ function Profile() {
                     >
                       Your Details
                     </h5>
-                    <h6>Ripunjay kumar</h6>
-                    <h6>rip@gmail.com</h6>
-                    <h6>7492032335</h6>
+                    <h6>{name}</h6>
+                    <h6>{email}</h6>
+                    <h6>{phone}</h6>
                     <hr color="white" />
                   </div>
                 </div>
@@ -80,6 +121,7 @@ function Profile() {
               </div>
             </Col>
             <Col md={9}>
+              {/* here is the route to order , offer and address  */}
               <Switch>
                 <Route path="/profile/orders" exact component={Order} />
                 <Route path="/profile/offer" exact component={Offer} />

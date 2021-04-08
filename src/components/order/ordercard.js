@@ -2,7 +2,6 @@ import React from "react";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import "./order.css";
 function OrderCard(props) {
-  console.log(props.Address);
   const orderAddress =
     props.Address.houseNumber +
     " " +
@@ -13,7 +12,7 @@ function OrderCard(props) {
     props.Address.city +
     " " +
     props.Address.state;
-  console.log(props.billing);
+
   var orderitem = "| ";
   props.cartitem.map((item) => {
     orderitem += item.title + " | ";

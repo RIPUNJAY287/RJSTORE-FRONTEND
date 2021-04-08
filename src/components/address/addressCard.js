@@ -4,12 +4,13 @@ import { Card, Media } from "react-bootstrap";
 import EditAddressModal from "./EditAddressModal";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import baseUrl from "../baseUrl";
 import axios from "axios";
 function AddressCard(props) {
   const [editModal, showEditModal] = useState(false);
   const history = useHistory();
   const { logout } = useAuth();
-  const { token, uid } = JSON.parse(localStorage.getItem("userData"));
+
   const Address =
     props.address.houseNumber +
     " " +
@@ -25,9 +26,11 @@ function AddressCard(props) {
   const hideEditModal = () => showEditModal(false);
   //to delete the address
   const onDeleteClick = async () => {
+    // removing the address
+    const { token, uid } = JSON.parse(localStorage.getItem("userData"));
     await axios
       .post(
-        "http://localhost:4000/api/user/address/remove",
+        `${baseUrl}/api/user/address/remove`,
         {
           uid: uid,
           addressId: props.address.id,
@@ -44,11 +47,13 @@ function AddressCard(props) {
         console.log("address removed");
       })
       .catch(async (err) => {
+        // if user is unauthenticated then logging out the user
         if (err.response.data.error === "Unauthenticated");
         {
           await logout();
           console.log("UnAuthenticated");
           history.push("/login");
+          alert("Your session is expired");
         }
       });
   };

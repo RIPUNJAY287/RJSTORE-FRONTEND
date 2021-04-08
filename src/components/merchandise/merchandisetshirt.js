@@ -3,7 +3,7 @@ import "react-bootstrap";
 import MerchandiseCard from "./merchandiseCard";
 import axios from "axios";
 import Spin from "../spinner/spinner";
-
+import baseUrl from "../baseUrl";
 function MerchandiseTshirt() {
   const [tshirt, setTshirt] = useState([]);
   const [loading, setloading] = useState(false);
@@ -11,9 +11,7 @@ function MerchandiseTshirt() {
     setloading(true);
     //fetching all the t-shirts
     const fetchdata = async () => {
-      const result = await axios.get(
-        "http://localhost:4000/api/merchandise/getAlltshirt"
-      );
+      const result = await axios.get(`${baseUrl}/api/merchandise/getAlltshirt`);
       if (result.data) {
         setTshirt(result.data);
         setloading(false);
@@ -28,7 +26,6 @@ function MerchandiseTshirt() {
         <div class="container-fluid clothes-background">
           <div class="row">
             {tshirt.map((item) => {
-              console.log(item);
               return <MerchandiseCard product={item} />;
             })}
           </div>

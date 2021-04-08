@@ -6,6 +6,8 @@ import { Row, Col, Button, Form, Modal, InputGroup } from "react-bootstrap";
 import ChooseAddressCard from "../address/chooseaddresscard";
 import "./checkout.css";
 import Spin from "../spinner/spinner";
+import baseUrl from "../baseUrl";
+import { useAuth } from "../../context/AuthContext";
 function loadrazorpay(src) {
   return new Promise((resolve) => {
     const script = document.createElement("script");
@@ -22,9 +24,6 @@ function loadrazorpay(src) {
 
 function Checkout(props) {
   const history = useHistory();
-  const { uid, token, name, phone, email } = JSON.parse(
-    localStorage.getItem("userData")
-  );
 
   const [addressData, setaddressData] = useState([]);
   const [orderAddress, setorderAddress] = useState(null);
@@ -40,17 +39,21 @@ function Checkout(props) {
   const [promoApply, setpromoApply] = useState(false);
   const [promoApplying, setpromoApplying] = useState("none");
   const promocodeRef = useRef();
+  const { logout } = useAuth();
 
   const onlinepayment = async () => {
+    const { uid, token } = JSON.parse(localStorage.getItem("userData"));
     if (orderAddress === null) {
+      //checking if address is selected , if not then showing a modal to select the address
       setAddressAlert(true);
       return;
     } else if (promoApply === true) {
+      // if promocode is applied then proceed this way
       setpromoApplying("inline");
       const promocodeString = promocodeRef.current.value;
       await axios
         .post(
-          "http://localhost:4000/api/promocode/avail-promocode",
+          `${baseUrl}/api/promocode/avail-promocode`,
           {
             uid: uid,
             promocode: promocodeString,
@@ -63,7 +66,7 @@ function Checkout(props) {
         )
         .then(async (res) => {
           setpromoApplying("none");
-          console.log(res.data);
+          console.log(res);
           if (res.data.error === true) {
             alert(res.data.message);
             setdiscountPrice(0);
@@ -72,8 +75,19 @@ function Checkout(props) {
           } else {
             displayRazorpay();
           }
+        })
+        .catch(async (err) => {
+          if (err.response.data.error === "Unauthenticated");
+          {
+            await logout();
+            console.log("UnAuthenticated");
+            history.push("/login");
+            alert("your session is expired");
+          }
+          console.log(err);
         });
     } else {
+      // if promocode is not applied then this way
       displayRazorpay();
     }
   };
@@ -88,10 +102,13 @@ function Checkout(props) {
       alert("Razorpay SDK failed to load. Are you online?");
       return;
     }
-
+    const { uid, token, name, phone, email } = JSON.parse(
+      localStorage.getItem("userData")
+    );
+    // sending the data to backend for checking
     const payment = await axios
       .post(
-        "http://localhost:4000/api/payment/razorpay",
+        `${baseUrl}/api/payment/razorpay`,
         {
           type: 1,
           uid: uid,
@@ -111,10 +128,10 @@ function Checkout(props) {
           description: "Thank you for nothing. Please give us some money",
           handler: async function (response) {
             const newdate = new Date();
-
+            // adding the order to database after successful payment
             await axios
               .post(
-                "http://localhost:4000/api/order/add",
+                `${baseUrl}/api/order/add`,
                 {
                   userId: uid,
                   Address: orderAddress,
@@ -140,9 +157,10 @@ function Checkout(props) {
               )
               .then((t) => {
                 console.log("successful payment done");
+                // adding the order id in user
                 axios
                   .post(
-                    "http://localhost:4000/api/user/add-orderId",
+                    `${baseUrl}/api/user/add-orderId`,
                     {
                       uid: uid,
                       orderId: response.razorpay_order_id,
@@ -152,9 +170,10 @@ function Checkout(props) {
                     }
                   )
                   .then((t) => {
+                    // deleting all the item from the cart
                     axios
                       .post(
-                        "http://localhost:4000/api/user/cart/delete",
+                        `${baseUrl}/api/user/cart/delete`,
                         {
                           uid: uid,
                         },
@@ -179,7 +198,7 @@ function Checkout(props) {
                 console.log(err.response);
               });
           },
-
+          // saving some information of user in razorpay
           prefill: {
             name: name,
             email: email,
@@ -191,28 +210,39 @@ function Checkout(props) {
         paymentObject.open();
 
         paymentObject.on("payment.failed", function (response) {
+          // if payment is failed
           console.log("you failed to pay");
           history.push("./failed");
         });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(async (err) => {
+        if (err.response.data.error === "Unauthenticated");
+        {
+          await logout();
+          console.log("UnAuthenticated");
+          history.push("/login");
+          alert("your session is expired");
+        }
       });
   }
 
   //For Cash Payment
   async function cashPay() {
+    const { uid, token } = JSON.parse(localStorage.getItem("userData"));
     if (promoApply === true) {
+      //if promocode is applied then proceed this way
       const promocodeString = promocodeRef.current.value;
+      // using the promocode that are applied just before payment
       await axios
         .post(
-          "http://localhost:4000/api/promocode/avail-promocode",
+          `${baseUrl}/api/promocode/avail-promocode`,
           {
             uid: uid,
             promocode: promocodeString,
           },
           {
             headers: {
+              "Content-Type": "application/json",
               Authorization: token,
             },
           }
@@ -227,109 +257,142 @@ function Checkout(props) {
           } else {
             cashpayment();
           }
+        })
+        .catch(async (err) => {
+          if (err.response.data.error === "Unauthenticated");
+          {
+            await logout();
+            console.log("UnAuthenticated");
+            history.push("/login");
+            alert("your session is expired");
+          }
         });
     } else {
+      //if promocode is not applied then proceed this way
       cashpayment();
     }
   }
-
+  // function for offline payment
   const cashpayment = async () => {
     const totalAmount = totalPrice - discountPrice + 49;
-
     setloading(true);
+    const { uid, token } = JSON.parse(localStorage.getItem("userData"));
     try {
-      const resdata = await axios.post(
-        "http://localhost:4000/api/payment/razorpay",
-        {
-          type: 0,
-          uid: uid,
-          price: totalAmount,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
+      //sending the data to backend for checking
+      const resdata = await axios
+        .post(
+          `${baseUrl}/api/payment/razorpay`,
+          {
+            type: 0,
+            uid: uid,
+            price: totalAmount,
           },
-        }
-      );
-      console.log(resdata.data);
-
-      if (resdata.data.error === false) {
-        const order_id = resdata.data.message;
-        const newdate = new Date();
-        await axios
-          .post(
-            "http://localhost:4000/api/order/add",
-            {
-              userId: uid,
-              id: order_id,
-              Address: orderAddress,
-              items: props.location.state.cartItem,
-              billing: {
-                baseprice: totalPrice,
-                discount: discountPrice,
-                deliveryCharge: 49,
-                finalAmount: totalAmount,
-                promocode: promo,
-                orderTime: {
-                  timestamp: newdate.getTime(),
-                },
-                paymentMethod: "CASH",
-              },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
             },
-            {
-              headers: { Authorization: token },
-            }
-          )
-          .then((t) => {
-            if (t) {
-              console.log("successful payment done");
-              axios
-                .post(
-                  "http://localhost:4000/api/user/add-orderId",
-                  {
-                    uid: uid,
-                    orderId: order_id,
+          }
+        )
+        .then(async (resdata) => {
+          if (resdata.data.error === false) {
+            const order_id = resdata.data.message;
+            const newdate = new Date();
+            //addding the order
+            await axios
+              .post(
+                `${baseUrl}/api/order/add`,
+                {
+                  userId: uid,
+                  id: order_id,
+                  Address: orderAddress,
+                  items: props.location.state.cartItem,
+                  billing: {
+                    baseprice: totalPrice,
+                    discount: discountPrice,
+                    deliveryCharge: 49,
+                    finalAmount: totalAmount,
+                    promocode: promo,
+                    orderTime: {
+                      timestamp: newdate.getTime(),
+                    },
+                    paymentMethod: "CASH",
                   },
-                  {
-                    headers: { Authorization: token },
-                  }
-                )
-                .then((t) => {
+                },
+                {
+                  headers: { Authorization: token },
+                }
+              )
+              .then((t) => {
+                if (t) {
+                  console.log("successful payment done");
+                  //adding the orderid in user
                   axios
                     .post(
-                      "http://localhost:4000/api/user/cart/delete",
+                      `${baseUrl}/api/user/add-orderId`,
                       {
                         uid: uid,
+                        orderId: order_id,
                       },
                       {
                         headers: { Authorization: token },
                       }
                     )
-                    .then((res) => {
-                      //delete the cart item
+                    .then((t) => {
+                      // delete the all item from cart
+                      axios
+                        .post(
+                          `${baseUrl}/api/user/cart/delete`,
+                          {
+                            uid: uid,
+                          },
+                          {
+                            headers: { Authorization: token },
+                          }
+                        )
+                        .then((res) => {
+                          //delete the cart item
+                        })
+                        .catch(async (err) => {
+                          console.log(err);
+                        });
+                      console.log("got to thanks page");
+                      history.push("./thanks");
+                      setloading(false);
                     })
                     .catch((err) => {
+                      history.push("./failed");
                       console.log(err.response);
                     });
-                  console.log("got to thanks page");
-                  history.push("./thanks");
-                  setloading(false);
-                })
-                .catch((err) => {
-                  history.push("./failed");
-                  console.log(err.response);
-                });
-            }
-          })
-          .catch((err) => {
+                }
+              })
+              .catch(async (err) => {
+                if (err.response.data.error === "Unauthenticated");
+                {
+                  await logout();
+                  console.log("UnAuthenticated");
+                  history.push("/login");
+                  alert("your session is expired");
+                  return;
+                }
+
+                history.push("./failed");
+                console.log(err.response);
+              });
+          } else {
             history.push("./failed");
-            console.log(err.response);
-          });
-      } else {
-        history.push("./failed");
-        console.log("it failed to order");
-      }
+            console.log("it failed to order");
+          }
+        })
+        .catch(async (err) => {
+          if (err.response.data.error === "Unauthenticated");
+          {
+            await logout();
+            console.log("UnAuthenticated");
+            history.push("/login");
+            alert("your session is expired");
+          }
+        });
     } catch (err) {
       console.log(err);
       history.push("./failed");
@@ -338,13 +401,14 @@ function Checkout(props) {
 
   //available checking promocode
   const checkPromocode = async () => {
+    const { uid, token } = JSON.parse(localStorage.getItem("userData"));
     if (promocodeRef.current.value !== "") {
       setpromoMessage("");
       const promostring = promocodeRef.current.value;
-
+      //checking the promocode availability
       await axios
         .post(
-          "http://localhost:4000/api/promocode/check-promocode",
+          `${baseUrl}/api/promocode/check-promocode`,
           {
             uid: uid,
             promocode: promocodeRef.current.value,
@@ -354,16 +418,15 @@ function Checkout(props) {
           }
         )
         .then((res) => {
+          //if promocode is available
           if (res.data.error === false) {
             const percent = res.data.promocode.Percentage;
             setpromoMessage(`${res.data.message} & will apply`);
             setpromoPercentage(percent);
-
             setpromo(promostring);
             const amt = parseInt(
               (totalPrice * res.data.promocode.Percentage) / 100
             );
-
             setdiscountPrice(amt);
             setpromoApply(true);
             //setting the discount price if promocode is available
@@ -376,13 +439,20 @@ function Checkout(props) {
             setpromo("");
           }
         })
-        .catch((err) => {
+        .catch(async (err) => {
           setpromoMessage("Promocode Not Available");
           setpromoPercentage(0);
           setdiscountPrice(0);
           setpromo("");
           setpromoApply(false);
           console.log(err);
+          if (err.response.data.error === "Unauthenticated");
+          {
+            await logout();
+            console.log("UnAuthenticated");
+            history.push("/login");
+            alert("your session is expired");
+          }
         });
     } else {
       alert("enter promocode");
@@ -408,9 +478,11 @@ function Checkout(props) {
 
   const fetchdata = async () => {
     setloading(true);
+    // fetching the address of user
+    const { uid, token } = JSON.parse(localStorage.getItem("userData"));
     await axios
       .post(
-        "http://localhost:4000/api/user/address/get",
+        `${baseUrl}/api/user/address/get`,
         {
           uid: uid,
         },
@@ -425,8 +497,14 @@ function Checkout(props) {
         setaddressData(res.data);
         setloading(false);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(async (err) => {
+        if (err.response.data.error === "Unauthenticated");
+        {
+          await logout();
+          console.log("UnAuthenticated");
+          history.push("/login");
+          alert("your session is expired");
+        }
       });
   };
 

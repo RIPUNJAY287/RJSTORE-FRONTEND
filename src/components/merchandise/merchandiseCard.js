@@ -7,13 +7,14 @@ import { useAuth } from "../../context/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import refreshToken from "../refreshToken";
 import "react-toastify/dist/ReactToastify.css";
+import baseUrl from "../baseUrl";
 function MerchandiseCard(props) {
   const { currentUser, logout } = useAuth();
   const history = useHistory();
   const [size, setsize] = useState([]);
 
   const [sizeModal, setsizeModal] = useState();
-  console.log(props.product.ImgLink);
+
   //selecting the size of t-shirt
   const selectSize = async () => {
     const availSize = props.product.details.size;
@@ -34,9 +35,10 @@ function MerchandiseCard(props) {
       product.details.size = sz;
 
       const { uid, token } = JSON.parse(localStorage.getItem("userData"));
+      // adding the item to cart
       await axios
         .post(
-          "http://localhost:4000/api/merchandise/cart/add",
+          `${baseUrl}/api/merchandise/cart/add`,
           { uid: uid, product: product },
           {
             headers: {
@@ -62,6 +64,7 @@ function MerchandiseCard(props) {
             await logout();
             console.log("UnAuthenticated");
             history.push("/login");
+            alert("Your session is expired");
           }
         });
     } else {
@@ -72,12 +75,11 @@ function MerchandiseCard(props) {
 
   // to add the item in wishlist
   const WishlistItem = async (sz) => {
-    console.log(currentUser);
     if (currentUser) {
       const { uid, token } = JSON.parse(localStorage.getItem("userData"));
       await axios
         .post(
-          "http://localhost:4000/api/merchandise/addwishlist",
+          `${baseUrl}/api/merchandise/addwishlist`,
           { uid: uid, productId: props.product.id },
           {
             headers: {
@@ -102,6 +104,7 @@ function MerchandiseCard(props) {
             await logout();
             console.log("UnAuthenticated");
             history.push("/login");
+            alert("Your session is expired");
           }
         });
     } else {

@@ -4,22 +4,22 @@ import OrderCard from "./ordercard";
 import { useAuth } from "../../context/AuthContext";
 import { useHistory } from "react-router-dom";
 import Spin from "../spinner/spinner";
+import baseUrl from "../baseUrl";
 function Order() {
   const { currentUser, logout } = useAuth();
-
   const history = useHistory();
-  const { uid, token } = JSON.parse(localStorage.getItem("userData"));
   const [orderList, setorderList] = useState([]);
   const [loading, setloading] = useState(false);
 
   const fetchlist = async () => {
     const orderitem = [];
     if (currentUser) {
+      const { uid, token } = JSON.parse(localStorage.getItem("userData"));
       setloading(true);
       //fetching the list of order by the user
       await axios
         .post(
-          "http://localhost:4000/api/order/orderlist",
+          `${baseUrl}/api/order/orderlist`,
           { uid: uid },
           {
             headers: {
@@ -33,7 +33,7 @@ function Order() {
           const allItems = res.data.map((it) => {
             return axios
               .post(
-                "http://localhost:4000/api/order/item",
+                `${baseUrl}/api/order/item`,
                 {
                   item: it,
                 },
@@ -49,6 +49,7 @@ function Order() {
                   await logout();
                   console.log("UnAuthenticated");
                   history.push("/login");
+                  alert("Your session is expired");
                 }
               });
           });
@@ -64,6 +65,7 @@ function Order() {
             await logout();
             console.log("UnAuthenticated");
             history.push("/login");
+            alert("Your session is expired");
           }
         });
     } else {

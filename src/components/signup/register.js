@@ -5,6 +5,7 @@ import "./register.css";
 import { FcGoogle } from "react-icons/fc";
 import { useAuth } from "../../context/AuthContext";
 import { auth, googleProvider } from "../../firebase";
+import baseUrl from "../baseUrl";
 import axios from "axios";
 const asyncLocalStorage = {
   setItem: async function (key, value) {
@@ -45,7 +46,7 @@ function Register() {
         passwordRef.current.value
       );
       const token = await result.user.getIdToken();
-      const res = await fetch("http://localhost:4000/api/user/new", {
+      const res = await fetch(`${baseUrl}/api/user/new`, {
         method: "post",
         headers: { "Content-Type": "application/json", Authorization: token },
         body: JSON.stringify({
@@ -86,7 +87,7 @@ function Register() {
         await res.user.getIdToken().then(async (token) => {
           await axios
             .post(
-              "http://localhost:4000/api/user/new",
+              `${baseUrl}/api/user/new`,
               {
                 name: res.user.displayName,
                 phone: res.user.phoneNumber,
