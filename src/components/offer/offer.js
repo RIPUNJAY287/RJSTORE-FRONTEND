@@ -4,6 +4,7 @@ import axios from "axios";
 import Spin from "../spinner/spinner";
 import { useAuth } from "../../context/AuthContext";
 import { useHistory } from "react-router-dom";
+import baseUrl from "../baseUrl";
 function Offer(props) {
   const { uid, token } = JSON.parse(localStorage.getItem("userData"));
   const [promoData, setpromoData] = useState([]);
@@ -15,7 +16,7 @@ function Offer(props) {
       setloading(true);
       // fetching all the promocodes
       await axios
-        .get("http://localhost:4000/api/promocode/getAll")
+        .get(`${baseUrl}/api/promocode/getAll`)
         .then((res) => {
           setpromoData(res.data);
 

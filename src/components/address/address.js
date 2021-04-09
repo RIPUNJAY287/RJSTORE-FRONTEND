@@ -6,10 +6,9 @@ import AddressCard from "./addressCard";
 import { useHistory } from "react-router-dom";
 import AddAddressModal from "./AddAddressModal";
 import { useAuth } from "../../context/AuthContext";
-
+import baseUrl from "../baseUrl";
 import Spin from "../spinner/spinner";
 function Address() {
-  const { uid, token } = JSON.parse(localStorage.getItem("userData"));
   const { logout } = useAuth();
   const history = useHistory();
   const [addressModal, showAddressModal] = React.useState(false);
@@ -18,10 +17,11 @@ function Address() {
   const [loading, setloading] = useState(false);
   const fetchdata = async () => {
     setloading(true);
+    const { uid, token } = JSON.parse(localStorage.getItem("userData"));
     //fetching all the address
     await axios
       .post(
-        "http://localhost:4000/api/user/address/get",
+        `${baseUrl}/api/user/address/get`,
         {
           uid: uid,
         },
@@ -36,12 +36,14 @@ function Address() {
         setaddress(res.data);
         setloading(false);
       })
+      //if user is unauthenticated then logging out the user
       .catch(async (err) => {
         if (err.response.data.error === "Unauthenticated");
         {
           await logout();
           console.log("UnAuthenticated");
           history.push("/login");
+          alert("Your session is expired");
         }
       });
   };

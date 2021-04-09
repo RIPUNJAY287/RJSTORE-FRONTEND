@@ -7,7 +7,7 @@ import Spin from "../spinner/spinner";
 import CheckoutCard from "../checkout/checkoutcard";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-
+import baseUrl from "../baseUrl";
 function Cart() {
   const [cart, setcart] = useState();
   const [totalPrice, setTotalPrice] = useState(0);
@@ -20,7 +20,7 @@ function Cart() {
     //fetching all item from cart
     await axios
       .post(
-        "http://localhost:4000/api/merchandise/cart/all",
+        `${baseUrl}/api/merchandise/cart/all`,
         { uid: uid },
         {
           headers: {
@@ -30,6 +30,7 @@ function Cart() {
         }
       )
       .then((res) => {
+        // setting the price the and quantity of item
         var tprice = 0;
         setcart(res.data);
         for (let item of res.data) {
@@ -39,11 +40,13 @@ function Cart() {
         setitemQty(res.data.length);
       })
       .catch(async (err) => {
+        console.log(err);
         if (err.response.data.error === "Unauthenticated");
         {
           await logout();
           console.log("UnAuthenticated");
           history.push("/login");
+          alert("Your session is expired");
         }
       });
   };

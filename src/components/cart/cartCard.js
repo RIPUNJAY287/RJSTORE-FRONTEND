@@ -7,8 +7,8 @@ import { ToastContainer, toast } from "react-toastify";
 import Spin from "../spinner/spinner";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import baseUrl from "../baseUrl";
 function CartCard(props) {
-  const { uid, token } = JSON.parse(localStorage.getItem("userData"));
   const [qty, setqty] = useState(props.product.quantity);
   const [loading, setloading] = useState(false);
   const history = useHistory();
@@ -34,10 +34,12 @@ function CartCard(props) {
   useEffect(() => {
     (async () => {
       setloading(true);
-      console.log(qty);
+
+      // updating the quantity of item in cart
+      const { uid, token } = JSON.parse(localStorage.getItem("userData"));
       await axios
         .post(
-          "http://localhost:4000/api/merchandise/cart/update",
+          `${baseUrl}/api/merchandise/cart/update`,
           {
             uid: uid,
             cartid: props.product.cartid,
@@ -51,16 +53,18 @@ function CartCard(props) {
           }
         )
         .then((res) => {
-          console.log("cart updated");
           setloading(false);
           props.fetchcart();
+          //after cart is updated , fetching the all the item in cart
         })
         .catch(async (err) => {
+          console.log(err);
           if (err.response.data.error === "Unauthenticated");
           {
             await logout();
             console.log("UnAuthenticated");
             history.push("/login");
+            alert("Your session is expired");
           }
         });
     })();
@@ -68,9 +72,10 @@ function CartCard(props) {
 
   // to remove the item from the cart
   const removeItem = async () => {
+    const { uid, token } = JSON.parse(localStorage.getItem("userData"));
     await axios
       .post(
-        "http://localhost:4000/api/merchandise/cart/remove",
+        `${baseUrl}/api/merchandise/cart/remove`,
         {
           uid: uid,
           productId: props.product.cartid,
@@ -96,6 +101,7 @@ function CartCard(props) {
           await logout();
           console.log("UnAuthenticated");
           history.push("/login");
+          alert("Your session is expired");
         }
       });
   };

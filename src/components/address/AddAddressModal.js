@@ -1,6 +1,9 @@
 import React from "react";
 import { Form, InputGroup, Modal, Button } from "react-bootstrap";
 import axios from "axios";
+import { useAuth } from "../../context/AuthContext";
+import baseUrl from "../baseUrl";
+import { useHistory } from "react-router-dom";
 export default function AddAddressModal(props) {
   const housenoRef = React.useRef();
   const line1Ref = React.useRef();
@@ -9,8 +12,8 @@ export default function AddAddressModal(props) {
   const stateRef = React.useRef();
   const pincodeRef = React.useRef();
   const titleRef = React.useRef();
-
-  const { token, uid } = JSON.parse(localStorage.getItem("userData"));
+  const { logout } = useAuth();
+  const history = useHistory();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const address = {
@@ -23,27 +26,28 @@ export default function AddAddressModal(props) {
       pincode: pincodeRef.current.value,
     };
     try {
+      //checking if the pincode of address is available for delivery or not
+      const { token, uid } = JSON.parse(localStorage.getItem("userData"));
       await axios
-        .post("http://localhost:4000/api/pincode/check", {
+        .post(`${baseUrl}/api/pincode/check`, {
           pincode: pincodeRef.current.value,
         })
         .then(async (resp) => {
+          // if pincode is available then adding the address
           if (resp.data.success === true) {
-            const res = await fetch(
-              "http://localhost:4000/api/user/address/add",
-              {
-                method: "post",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: token,
-                },
-                body: JSON.stringify({
-                  address: address,
-                  uid: uid,
-                }),
-              }
-            );
+            const res = await fetch(`${baseUrl}/api/user/address/add`, {
+              method: "post",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: token,
+              },
+              body: JSON.stringify({
+                address: address,
+                uid: uid,
+              }),
+            });
             if (res) {
+              // if address is added then hiding the modal and showing the fetching the data again
               props.fetchdata();
               props.onHide();
             }
@@ -51,14 +55,19 @@ export default function AddAddressModal(props) {
             alert("Pincode is not available for Delivery, Change your Address");
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(async (err) => {
+          if (err.response.data.error === "Unauthenticated");
+          {
+            await logout();
+            console.log("UnAuthenticated");
+            history.push("/login");
+            alert("your session is expired");
+          }
         });
     } catch (Err) {
       console.log(Err);
     }
   };
-
   return (
     <Modal show={props.show} onHide={props.onHide} centered>
       <Modal.Header closeButton={true}>

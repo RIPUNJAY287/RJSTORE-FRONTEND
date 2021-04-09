@@ -4,21 +4,21 @@ import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import WishlistCard from "./wishlistCard";
 import Spin from "../spinner/spinner";
+import baseUrl from "../baseUrl";
 import { useHistory } from "react-router-dom";
 function WishList() {
   const { currentUser, logout } = useAuth();
   const history = useHistory();
-
-  const { uid, token } = JSON.parse(localStorage.getItem("userData"));
   const [wishList, setwishList] = useState();
 
   const fetchlist = async () => {
     const wishitem = [];
     if (currentUser) {
+      const { uid, token } = JSON.parse(localStorage.getItem("userData"));
       // fetching the list of wishlist item
       await axios
         .post(
-          "http://localhost:4000/api/merchandise/getwishlist",
+          `${baseUrl}/api/merchandise/getwishlist`,
           { uid: uid },
           {
             headers: {
@@ -32,7 +32,7 @@ function WishList() {
           const allItems = res.data.map((it) => {
             return axios
               .post(
-                "http://localhost:4000/api/merchandise/gettshirt",
+                `${baseUrl}/api/merchandise/gettshirt`,
                 {
                   item: it,
                 },
@@ -48,13 +48,12 @@ function WishList() {
                   await logout();
                   console.log("UnAuthenticated");
                   history.push("/login");
+                  alert("Your session is expired");
                 }
               });
           });
           Promise.all(allItems).then(() => {
-            console.log("wishlist");
             setwishList(wishitem);
-            console.log("wishlist after");
           });
         })
         .catch(async (err) => {
@@ -63,6 +62,7 @@ function WishList() {
             await logout();
             console.log("UnAuthenticated");
             history.push("/login");
+            alert("Your session is expired");
           }
         });
     } else {
@@ -92,7 +92,6 @@ function WishList() {
           >
             <div class="row">
               {wishList.map((item) => {
-                console.log(item);
                 return <WishlistCard fetchlist={fetchlist} product={item} />;
               })}
             </div>

@@ -6,7 +6,7 @@ import "./login.css";
 import { useAuth } from "../../context/AuthContext";
 import { auth, googleProvider } from "../../firebase";
 import { FcGoogle } from "react-icons/fc";
-
+import baseUrl from "../baseUrl";
 const asyncLocalStorage = {
   setItem: async function (key, value) {
     return Promise.resolve().then(function () {
@@ -61,7 +61,7 @@ function Login() {
       // });
 
       const res = await axios.post(
-        `http://localhost:4000/api/user/getDetails`,
+        `${baseUrl}/api/user/getDetails`,
         {
           uid: result.user.uid,
         },
@@ -83,6 +83,7 @@ function Login() {
     } catch {
       console.log("failed to log in");
       setError("Failed to log in");
+      alert("Failed to login, Enter correct Password");
     }
 
     setLoading(false);

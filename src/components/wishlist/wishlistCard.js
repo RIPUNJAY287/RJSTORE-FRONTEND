@@ -5,11 +5,10 @@ import { useHistory } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { FaCartPlus, FaHeartBroken } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
-
+import baseUrl from "../baseUrl";
 function WishlistCard(props) {
   const { currentUser, logout } = useAuth();
   const history = useHistory();
-  const { uid, token } = JSON.parse(localStorage.getItem("userData"));
 
   const [size, setsize] = useState([]);
   const [sizeModal, setsizeModal] = useState();
@@ -31,11 +30,11 @@ function WishlistCard(props) {
         ...props.product,
       };
       product.details.size = sz;
-
-      console.log(product);
+      const { uid, token } = JSON.parse(localStorage.getItem("userData"));
+      // adding the item to cart
       await axios
         .post(
-          "http://localhost:4000/api/merchandise/cart/add",
+          `${baseUrl}/api/merchandise/cart/add`,
           { uid: uid, product: product },
           {
             headers: {
@@ -60,6 +59,7 @@ function WishlistCard(props) {
             await logout();
             console.log("UnAuthenticated");
             history.push("/login");
+            alert("Your session is expired");
           }
         });
     } else {
@@ -69,9 +69,11 @@ function WishlistCard(props) {
   };
   const WishlistRemove = async () => {
     try {
+      //removing the item from wishlist
+      const { uid, token } = JSON.parse(localStorage.getItem("userData"));
       const res = await axios
         .post(
-          "http://localhost:4000/api/merchandise/wishlist/remove",
+          `${baseUrl}/api/merchandise/wishlist/remove`,
           {
             uid: uid,
             productId: props.product.id,
@@ -99,6 +101,7 @@ function WishlistCard(props) {
             await logout();
             console.log("UnAuthenticated");
             history.push("/login");
+            alert("Your session is expired");
           }
         });
     } catch (err) {
