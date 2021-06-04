@@ -56,7 +56,7 @@ function Header(props) {
     <>
       <Navbar className="NavBar " expand="sm">
         <Navbar.Brand className="text-white" to="/">
-          FOOD DUDE
+          RJ STORE
         </Navbar.Brand>
         <NavbarToggle target="#mynavbar" class="bg-light" />
         <NavbarCollapse id="mynavbar">

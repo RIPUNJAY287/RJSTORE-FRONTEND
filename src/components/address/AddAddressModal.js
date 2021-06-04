@@ -130,7 +130,7 @@ export default function AddAddressModal(props) {
                   size="sm"
                   type="text"
                   readOnly
-                  value="Bhubaneswar"
+                  value="Patna"
                   ref={cityRef}
                 />
               </InputGroup>
@@ -142,7 +142,7 @@ export default function AddAddressModal(props) {
                   size="sm"
                   type="text"
                   readOnly
-                  value="Orisha"
+                  value="Bihar"
                   ref={stateRef}
                 />
               </InputGroup>

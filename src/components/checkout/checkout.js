@@ -543,7 +543,7 @@ function Checkout(props) {
               <div className="px-3">
                 {" "}
                 <h5 className="text-center p-1 my-4 pt-3 text-white">
-                  Food Dude - Your Order
+                  RJ STORE - Your Order
                 </h5>
                 <InputGroup className="input-group-sm mb-2">
                   <Form.Control

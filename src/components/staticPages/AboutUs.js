@@ -18,23 +18,23 @@ function AboutUs(props) {
                   class="mb-0 mt-2 font-italic psamll"
                   style={{ fontSize: "14px", color: "#454040" }}
                 >
-                  Its hightime you wave Hi to good food and Bye to artificial
-                  colours, preservatives and harmful adulterations!!!
+                  Its hightime you wave Hi to new cool, stylish and best quality
+                  Tshirt with brand new design and color , and Bye to Old
+                  fashion Tshirt!!
                   <br />
-                  At Food dude, we envision a healthy, natural and sustainable
-                  food delivery, ensuring the best of quality checks being done,
-                  before our food reaches your doorstep.
+                  At RJ STORE, we envision a strong, quality and sustainable
+                  Tshirt delivery, ensuring the best of quality checks being
+                  done, before it ship from here.
                   <br />
                   Let's be honest here. It's insane to compromise on the quality
-                  of food. Being casual in this aspect can make you pay huge
-                  hospital bills either in the vicinity or future.
+                  of Tshirt. Being casual in this aspect can make you pay loss
+                  in confidence in this modern era.
                   <br />
-                  We at Fooddude ensure that that our customers get the premium
-                  of quality food without compromising with the quantity.
+                  We at RJSTORE ensure that that our customers get the premium
+                  of quality Tshirt without compromising with the quantity.
                   <br />
-                  So what are you waiting for? Go satiate your hunger at the
-                  comfort of your home by placing your first order today. We are
-                  just a fingertip away!!!!
+                  So what are you waiting for? Go check out new Tshirt and place
+                  your first order today. We are just a fingertip away!!!!
                 </p>
               </blockquote>
             </Col>

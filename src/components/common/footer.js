@@ -39,18 +39,18 @@ function Footer(props) {
               <h6 className="mb-3 user_select_disable">Legal</h6>
               <ul>
                 <li>
-                  <Link to="/privacy" className="footerlink">
+                  <Link to="/privac" className="footerlink">
                     Privacy Policy
                   </Link>
                 </li>
                 <li>
-                  <Link to="/terms" className="footerlink">
+                  <Link to="/term" className="footerlink">
                     Terms of Service
                   </Link>
                 </li>
                 {/* <li><Link to="#">Careers</Link></li> */}
                 <li>
-                  <Link to="/refund" className="footerlink">
+                  <Link to="/refun" className="footerlink">
                     Refund/ Cancellation Policy
                   </Link>
                 </li>

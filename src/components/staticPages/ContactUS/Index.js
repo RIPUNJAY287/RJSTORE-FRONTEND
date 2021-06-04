@@ -26,7 +26,7 @@ const Index = () => {
               Our Social Media handle:{" "}
               <a
                 className="contact_link_"
-                href="https://www.facebook.com/wefooddude"
+                href="https://www.facebook.com/rjstore"
                 rel="noreferrer"
                 target="_blank"
               >
@@ -34,7 +34,7 @@ const Index = () => {
               </a>
               <a
                 className="contact_link_"
-                href="https://www.instagram.com/wefooddude/"
+                href="https://www.instagram.com/rjstore/"
                 rel="noreferrer"
                 target="_blank"
               >
@@ -42,7 +42,7 @@ const Index = () => {
               </a>
               <a
                 className="contact_link_"
-                href="https://www.linkedin.com/company/70449147/"
+                href="https://www.linkedin.com/company/rjstore/"
                 rel="noreferrer"
                 target="_blank"
               >
@@ -50,7 +50,7 @@ const Index = () => {
               </a>
               <a
                 className="contact_link_"
-                href="https://twitter.com/wefooddude"
+                href="https://twitter.com/rjstore"
                 rel="noreferrer"
                 target="_blank"
               >
@@ -58,7 +58,7 @@ const Index = () => {
               </a>
               <a
                 className="contact_link_"
-                href="https://www.snapchat.com/add/wefooddude"
+                href="https://www.snapchat.com/add/rjstore"
                 rel="noreferrer"
                 target="_blank"
               >
@@ -73,41 +73,40 @@ const Index = () => {
                 rel="noreferrer"
                 target="_blank"
               >
-                Mail: info@fooddude
+                Mail: kripunjay81@gmail.com
               </a>
             </div>
             <div className="contact_card_popups_detail">
               <IoCall />{" "}
               <a
                 className="contact_link"
-                href="tel:+916371830551"
+                href="tel:+917492032335"
                 rel="noreferrer"
                 target="_blank"
               >
-                Phone: +91-6371830551
+                Phone: +91-7492032335
               </a>
             </div>
             <div className="contact_card_popups_detail">
               <FaWhatsapp />{" "}
               <a
                 className="contact_link"
-                href="https://wa.me/+916371830551"
+                href="https://wa.me/+917492032335"
                 rel="noreferrer"
                 target="_blank"
               >
-                Whatsapp: +91-6371830551
+                Whatsapp: +91-7492032335
               </a>
             </div>
             <div className="contact_card_popups_detail">
               <IoLocation />{" "}
               <a
                 className="contact_link"
-                href="https://maps.apple.com/?ll=20.2386,85.8397"
+                href=""
                 rel="noreferrer"
                 target="_blank"
               >
-                Gouri Nagar,Old Town Samantarapur, Bhubaneswar, Khordha, Orissa,
-                751002
+                Karma Road, Aurangabad (Bihar) , pincode - 824101
               </a>
             </div>
             <img

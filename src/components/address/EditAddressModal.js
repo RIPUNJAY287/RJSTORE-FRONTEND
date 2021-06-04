@@ -142,7 +142,7 @@ export default function EditAddressModal(props) {
                   size="sm"
                   type="text"
                   readOnly
-                  value="Bhubaneswar"
+                  value="Aurangabad"
                   ref={cityRef}
                 />
               </InputGroup>
@@ -154,7 +154,7 @@ export default function EditAddressModal(props) {
                   size="sm"
                   type="text"
                   readOnly
-                  value="Orisha"
+                  value="Bihar"
                   ref={stateRef}
                 />
               </InputGroup>
