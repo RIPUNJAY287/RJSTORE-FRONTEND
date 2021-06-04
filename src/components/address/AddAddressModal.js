@@ -52,7 +52,9 @@ export default function AddAddressModal(props) {
               props.onHide();
             }
           } else {
-            alert("Pincode is not available for Delivery, Change your Address");
+            alert(
+              "Pincode is not available for Delivery, Change your Address. available pincode  : 824101, 824121, 800001, 800005"
+            );
           }
         })
         .catch(async (err) => {
